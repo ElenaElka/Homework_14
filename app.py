@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 @app.route('/movies/<title>')
 def title_search(title):
-    movies = get_title(title)
-    return jsonify(movies)
+    movie = get_title(title)
+    return jsonify(movie)
 
 
 @app.route('/years/<int:year_1>/to/<int:year_2>')
@@ -17,7 +17,7 @@ def years_search(year_1, year_2):
     return jsonify(movies_year)
 
 
-@app.route('/movie/rating/<group_type>')
+@app.route('/rating/<group_type>')
 def rating_search(group_type):
     movies_group = get_rating(group_type)
 
@@ -26,30 +26,33 @@ def rating_search(group_type):
     adult_list = []
     movie_dict = children_list + family_list + adult_list
 
-    for movie in movies_group:
-        if movie == 'children':
-           children_list.append(movie)
-        if movie == 'family':
-           family_list.append(movie)
+    for group in movies_group:
+        if group == 'children':
+           children_list.append(group)
+        if group == 'family':
+           family_list.append(group)
         else:
-           adult_list.append(movie)
+           adult_list.append(group)
 
     return jsonify(movie_dict)
 
 
-@app.route('/movie/<genre>')
+@app.route('/movies/<genre>')
 def genre_search(genre):
     movies_genre = get_genre(genre)
     return jsonify(movies_genre)
 
-@app.route('/movie/<actor>')
+
+@app.route('/movies/<actor>')
 def actors_search(actor):
     movies_actors = get_actors(actor)
     return jsonify(movies_actors)
 
-@app.route('/movie/<type>/<int:year_release>/<genre>')
+
+@app.route('/<type>/<int:year_release>/<genre>')
 def type_movie_search(type, year_release, genre):
     movies_type = get_type_movie(type, year_release, genre)
     return jsonify(movies_type)
+
 
 app.run()
